@@ -50,6 +50,7 @@ let movies = [
 ]
 
 app.use(morgan('common'));
+app.use(express.static('public'));
 
 // GET requests
 app.get('/movies', (req, res) => {
@@ -89,10 +90,10 @@ app.put('/users/:username/:password/:email/:dateofbirth', (req, res) => {
   res.send('User Updated.')
 });
 
-app.get('/documentation', (req,res) => {
-  res.sendFile('public/documentation.html', { root: __dirname
-  });
-});
+// app.get('/documentation', (req,res) => {
+//   res.sendFile('public/documentation.html', { root: __dirname
+//   });
+// });
 
 app.put('/users/:username/favorites/:title', (req, res) => {
   let user = users.find((user) => { return user.username === req.params.username });
