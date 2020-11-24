@@ -1,13 +1,103 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Movie API</title>
-  </head>
-  <body>
-    <h1>Movie API</h1>
-    <p>
-      a REST API for an application called “myFlix” that interacts with a database that stores data about different movies.
-    </p>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Movie API</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 50px;
+    }
+
+    table,
+    tr,
+    td,
+    th {
+      border: 1px solid #000;
+    }
+
+    th {
+      background: #ddd;
+      text-align: left;
+    }
+
+    td,
+    th {
+      padding: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Movie API</h1>
+  <p>
+    a REST API for an application called “myFlix” that interacts with a database that stores data about different
+    movies.
+  </p>
+  <h2>Methods</h2>
+  <table>
+    <tr>
+      <th>Method</th>
+      <th>Path</th>
+      <th>Description</th>
+      <th>Body</th>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td>/movies</td>
+      <td>List of all movies</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td>/movies/[title]</td>
+      <td>Get one move by title</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td>/users</td>
+      <td>Get list of all users</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>POST</td>
+      <td>/users</td>
+      <td>Create a new user</td>
+      <td>Username: [Username],<br>
+        Password: [Password],<br>
+        Email: [Email],<br>
+        Birthday: [Birthday]</td>
+    </tr>
+    <tr>
+      <td>PUT</td>
+      <td>/users/[username]</td>
+      <td>Update a user</td>
+      <td>Username: [Username],<br>
+        Password: [Password],<br>
+        Email: [Email],<br>
+        Birthday: [Birthday]</td>
+    </tr>
+    <tr>
+      <td>PUT</td>
+      <td>/users/[username]/favorites/[id]</td>
+      <td>Update one user's favorites</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>DELETE</td>
+      <td>/users/[username]/favorites/[id]</td>
+      <td>Delete from one user's favorites</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>DELETE</td>
+      <td>/users/[username]</td>
+      <td>Delete user</td>
+      <td>-</td>
+    </tr>
+  </table>
+</body>
+
 </html>
