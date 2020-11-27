@@ -5,6 +5,8 @@ const uuid = require('uuid');
 const app = express();
 const mongoose = require('mongoose');
 const Models = require('./models.js');
+const passport = require('passport');
+require('./passport');
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -19,18 +21,19 @@ app.use(bodyParser.json());
 app.use(morgan('common'));
 app.use(express.static('public'));
 
+let auth = require('./auth')(app);
+
 // GET requests
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find().then(movies => {
     res.status(200).json(movies);
   }).catch(err => {
     console.error(err);
     res.status(500).send('Error: ' + err);
   })
-
 });
 
-app.get('/movies/:title', (req, res) => {
+app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({ Title: req.params.title }).then(movie => {
     res.status(200).json(movie);
   }).catch(err => {
@@ -39,15 +42,15 @@ app.get('/movies/:title', (req, res) => {
   })
 });
 
-app.get('/genres/:name', (req, res) => {
+app.get('/genres/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json(genres.find((genre) => { return genre.name === req.params.name }));
 });
 
-app.get('/directors/:name', (req, res) => {
+app.get('/directors/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json(directors.find((director) => { return director.name === req.params.name }));
 });
 
-app.get('/users', (req, res) => {
+app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.find().then(users => {
     res.status(200).json(users);
   }).catch(err => {
@@ -77,7 +80,7 @@ app.post('/users', (req, res) => {
     });
 });
 
-app.put('/users/:username', (req, res) => {
+app.put('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate(
     { Username: req.params.username },
     {
@@ -100,7 +103,7 @@ app.put('/users/:username', (req, res) => {
   )
 });
 
-app.put('/users/:username/favorites/:id', (req, res) => {
+app.put('/users/:username/favorites/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate(
     { Username: req.params.username },
     {
@@ -119,7 +122,7 @@ app.put('/users/:username/favorites/:id', (req, res) => {
   )
 });
 
-app.delete('/users/:username/favorites/:id', (req, res) => {
+app.delete('/users/:username/favorites/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate(
     { Username: req.params.username },
     {
