@@ -15,8 +15,14 @@ const Users = Models.User;
 
 // let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 
+// mongoose
+//   .connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true })
+//   .catch(err => {
+//     console.error(err);
+//   });
+
 mongoose
-  .connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch(err => {
     console.error(err);
   });
