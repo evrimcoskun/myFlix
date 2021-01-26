@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "parcel src/index.html"
+  },
   "dependencies": {
     "globally": "^0.0.0",
     "parcel-bundler": "^1.12.4",
