@@ -37,7 +37,7 @@ app.use(cors({
 let auth = require('./auth')(app);
 
 // GET requests
-app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies', (req, res) => {
   Movies.find().then(movies => {
     res.status(200).json(movies);
   }).catch(err => {
