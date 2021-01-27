@@ -1,3 +1,14 @@
+.login-view {
+  margin: 50px auto;
+  max-width: 500px;
+}
+.register-view {
+  max-width: 500px;
+  margin: 50px auto;
+}
+.main-view {
+  margin: 50px auto;
+}
 .my-flix {
   color: steelblue;
 }

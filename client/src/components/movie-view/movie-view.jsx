@@ -1,4 +1,8 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import ListGroup from 'react-bootstrap/ListGroup';
+import ListGroupItem from 'react-bootstrap/ListGroupItem';
 
 export class MovieView extends React.Component {
   constructor() {
@@ -13,26 +17,22 @@ export class MovieView extends React.Component {
     if (!movie) return null;
 
     return (
-      <div className="movie-view">
-        <img src={movie.ImagePath} alt={movie.Title} className="movie-poster" />
-        <div className="movie-title">
-          <span className="label">Title: </span>
-          <span className="value">{movie.Title}</span>
-        </div>
-        <div className="movie-description">
-          <span className="label">Description: </span>
-          <span className="value">{movie.Description}</span>
-        </div>
-        <div className="movie-genre">
-          <span className="label">Genre: </span>
-          <span className="value">{movie.Genre.Name}</span>
-        </div>
-        <div className="movie-director">
-          <span className="label">Director: </span>
-          <span className="value">{movie.Director.Name}</span>
-        </div>
-        <button onClick={() => onClick()}>Back</button>
-      </div>
+      <Card style={{ width: '30rem' }}>
+        <Card.Img variant="top" src={movie.ImagePath} alt={movie.Title} className="movie-poster" />
+        <Card.Body>
+          <Card.Title>{movie.Title}</Card.Title>
+          <Card.Text>
+            {movie.Description}
+          </Card.Text>
+        </Card.Body>
+        <ListGroup className="list-group-flush">
+          <ListGroupItem><b>Genre:</b> {movie.Genre.Name}</ListGroupItem>
+          <ListGroupItem><b>Director:</b> {movie.Director.Name}</ListGroupItem>
+        </ListGroup>
+        <Card.Body>
+          <Button variant="outline-primary" onClick={onClick}>Back</Button>
+        </Card.Body>
+      </Card>
     );
   }
 }
