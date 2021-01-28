@@ -37,13 +37,13 @@ app.use(cors({
 let auth = require('./auth')(app);
 
 // GET requests
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find().then(movies => {
     res.status(200).json(movies);
   }).catch(err => {
     console.error(err);
     res.status(500).send('Error: ' + err);
-  })
+  });
 });
 
 app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -52,15 +52,15 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req
   }).catch(err => {
     console.error(err);
     res.status(500).send('Error: ' + err);
-  })
+  });
 });
 
 app.get('/genres/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.json(genres.find((genre) => { return genre.name === req.params.name }));
+  res.json(genres.find((genre) => { return genre.name === req.params.name; }));
 });
 
 app.get('/directors/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.json(directors.find((director) => { return director.name === req.params.name }));
+  res.json(directors.find((director) => { return director.name === req.params.name; }));
 });
 
 app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -70,7 +70,7 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
     console.error(err);
     res.status(500).send('Error: ' + err);
   });
-})
+});
 
 app.post('/users', [
   check('Username', 'Username is required').isLength({ min: 5 }),
@@ -98,7 +98,7 @@ app.post('/users', [
         }).catch(err => {
           console.error(err);
           res.status(500).send('Error: ' + err);
-        })
+        });
       }
     });
 });
@@ -123,7 +123,7 @@ app.put('/users/:username', passport.authenticate('jwt', { session: false }), (r
         res.json(updatedUser);
       }
     }
-  )
+  );
 });
 
 app.put('/users/:username/favorites/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -142,7 +142,7 @@ app.put('/users/:username/favorites/:id', passport.authenticate('jwt', { session
         res.send('Movie ' + req.params.id + ' was added to user: ' + req.params.username + '\'s favorites.');
       }
     }
-  )
+  );
 });
 
 app.delete('/users/:username/favorites/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -161,21 +161,21 @@ app.delete('/users/:username/favorites/:id', passport.authenticate('jwt', { sess
         res.send('Movie ' + req.params.id + ' was removed from user: ' + req.params.username + '\'s favorites.');
       }
     }
-  )
+  );
 });
 
 app.delete('/users/:username', (req, res) => {
   Users.findOneAndRemove({ Username: req.params.username })
     .then(user => {
       if (!user) {
-        res.status(400).send(req.params.username + ' was not found.')
+        res.status(400).send(req.params.username + ' was not found.');
       } else {
-        res.status(200).send(req.params.username + ' was deleted.')
+        res.status(200).send(req.params.username + ' was deleted.');
       }
     }).catch(err => {
       console.error(err);
       res.status(500).send('Error: ' + err);
-    })
+    });
 });
 
 app.use((err, req, res, next) => {

@@ -22,7 +22,42 @@ export class MainView extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('https://ec-myflix-api.herokuapp.com/movies')
+
+  }
+
+  onMovieClick(movie) {
+    this.setState({
+      selectedMovie: movie
+    });
+  }
+
+  onBackClick() {
+    this.setState({
+      selectedMovie: null
+    });
+  }
+
+  onLoggedIn(authData) {
+    console.log(authData);
+    this.setState({
+      user: authData.user.Username
+    });
+
+    localStorage.setItem('token', authData.token);
+    localStorage.setItem('user', authData.user.Username);
+    this.getMovies(authData.token);
+  }
+
+  onRegisterView() {
+    this.setState({
+      registerView: true
+    });
+  }
+
+  getMovies(token) {
+    axios.get('https://ec-myflix-api.herokuapp.com/movies', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
       .then(response => {
         this.setState({
           movies: response.data
@@ -30,31 +65,7 @@ export class MainView extends React.Component {
       })
       .catch(error => {
         console.log(error);
-      })
-  }
-
-  onMovieClick(movie) {
-    this.setState({
-      selectedMovie: movie
-    })
-  }
-
-  onBackClick() {
-    this.setState({
-      selectedMovie: null
-    })
-  }
-
-  onLoggedIn(user) {
-    this.setState({
-      user
-    })
-  }
-
-  onRegisterView() {
-    this.setState({
-      registerView: true
-    });
+      });
   }
 
   render() {
@@ -66,7 +77,7 @@ export class MainView extends React.Component {
           <Container>
             <RegisterView onRegister={() => console.log('Registered')} />
           </Container>
-        )
+        );
       } else {
         return (
           <Container>

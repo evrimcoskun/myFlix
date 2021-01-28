@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import axios from 'axios';
 
 import './login-view.scss';
 
@@ -12,13 +13,21 @@ export function LoginView(props) {
     e.preventDefault();
     console.log(username, password);
     /* Send a request to the server for authentication */
-    props.onLoggedIn(username)
-  }
+    axios.post('https://ec-myflix-api.herokuapp.com/login', {
+      Username: username,
+      Password: password
+    }).then(response => {
+      const data = response.data;
+      props.onLoggedIn(data);
+    }).catch(error => {
+      console.log('no such user');
+    });
+  };
 
   const OpenRegisterView = (e) => {
     e.preventDefault();
     props.onRegisterView();
-  }
+  };
 
   return (
     <div className="login-view">
@@ -38,5 +47,5 @@ export function LoginView(props) {
       </Form>
     </div>
 
-  )
+  );
 }
