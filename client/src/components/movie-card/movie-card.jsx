@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
+import { Link } from 'react-router-dom';
+
 export class MovieCard extends React.Component {
+
   render() {
-    const { movie, onClick } = this.props;
+    const { movie, isProfile } = this.props;
 
     return (
       <Card>
@@ -13,7 +16,10 @@ export class MovieCard extends React.Component {
         <Card.Body>
           <Card.Title>{movie.Title}</Card.Title>
           <Card.Text>{movie.Description}</Card.Text>
-          <Button onClick={() => onClick(movie)} variant="outline-primary">Open</Button>
+          <Link to={`/movies/${movie._id}`}>
+            <Button variant="outline-primary">Open</Button>
+          </Link>{' '}
+          {isProfile ? <Button variant="outline-danger" onClick={() => this.props.removeFavorite(movie._id)}>Remove</Button> : ''}
         </Card.Body>
       </Card>
     );
@@ -25,6 +31,5 @@ MovieCard.propTypes = {
     Title: PropTypes.string,
     Description: PropTypes.string.isRequired,
     ImagePath: PropTypes.string.isRequired
-  }).isRequired,
-  onClick: PropTypes.func.isRequired
+  }).isRequired
 };

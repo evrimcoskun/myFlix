@@ -1,12 +1,18 @@
 import React from 'react';
 import axios from 'axios';
 import Container from 'react-bootstrap/Container';
-import CardColumns from 'react-bootstrap/CardColumns';
+import Button from 'react-bootstrap/Button';
+
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import { LoginView } from '../login-view/login-view';
-import { RegisterView } from '../register-view/register-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
+import { MovieListView } from '../movie-list-view/movie-list-view';
+import { RegisterView } from '../register-view/register-view';
+import { GenreView } from '../genre-view/genre-view';
+import { DirectorView } from '../director-view/director-view';
+import { ProfileView } from '../profile-view/profile-view';
 
 import './main-view.scss';
 
@@ -15,43 +21,69 @@ export class MainView extends React.Component {
     super();
 
     this.state = {
-      movies: null,
-      selectedMovie: null,
-      registerView: false
+      movies: null
     };
   }
 
   componentDidMount() {
-
-  }
-
-  onMovieClick(movie) {
-    this.setState({
-      selectedMovie: movie
-    });
-  }
-
-  onBackClick() {
-    this.setState({
-      selectedMovie: null
-    });
+    let accessToken = localStorage.getItem('token');
+    if (accessToken !== null) {
+      this.setState({
+        user: {
+          username: localStorage.getItem('username'),
+          email: localStorage.getItem('email'),
+          birthday: localStorage.getItem('birthday'),
+          favorites: JSON.parse(localStorage.getItem('favorites'))
+        }
+      });
+      this.getMovies(accessToken);
+    }
   }
 
   onLoggedIn(authData) {
     console.log(authData);
     this.setState({
-      user: authData.user.Username
+      user: {
+        username: authData.user.Username,
+        email: authData.user.Email,
+        birthday: authData.user.Birthday,
+        favorites: authData.user.Favorites
+      }
     });
 
     localStorage.setItem('token', authData.token);
-    localStorage.setItem('user', authData.user.Username);
+    localStorage.setItem('username', authData.user.Username);
+    localStorage.setItem('email', authData.user.Email);
+    localStorage.setItem('birthday', authData.user.Birthday);
+    localStorage.setItem('favorites', JSON.stringify(authData.user.Favorites));
+
     this.getMovies(authData.token);
   }
 
-  onRegisterView() {
+  onRegister(userData) {
+    console.log('registered');
+    console.log(userData);
+    window.location = '/';
+  }
+
+  onUpdateUser(userData) {
     this.setState({
-      registerView: true
+      user: {
+        username: userData.Username,
+        email: userData.Email,
+        birthday: userData.Birthday,
+        favorites: userData.Favorites
+      }
     });
+
+    localStorage.setItem('username', userData.Username);
+    localStorage.setItem('email', userData.Email);
+    localStorage.setItem('birthday', userData.Birthday);
+    localStorage.setItem('favorites', JSON.stringify(userData.Favorites));
+    setTimeout(() => {
+      console.log(this.state);
+    }, 1000);
+
   }
 
   getMovies(token) {
@@ -68,44 +100,58 @@ export class MainView extends React.Component {
       });
   }
 
+  logout() {
+    localStorage.clear();
+    window.location = '/';
+  }
+
   render() {
-    const { movies, selectedMovie, user, registerView } = this.state;
+    const { movies, user } = this.state;
 
     if (!user) {
-      if (registerView) {
-        return (
-          <Container>
-            <RegisterView onRegister={() => console.log('Registered')} />
+      return (
+        <Router>
+          <Container className="main-view">
+            <Route exact path="/" render={() => <LoginView onLoggedIn={user => this.onLoggedIn(user)} />} />
+            <Route path="/register" render={() => <RegisterView onRegister={user => this.onRegister(user)} />} />
           </Container>
-        );
-      } else {
-        return (
-          <Container>
-            <LoginView onLoggedIn={user => this.onLoggedIn(user)} onRegisterView={() => this.onRegisterView()} />
-          </Container>
-        );
-      }
+        </Router>
+      );
     }
-    if (!movies) return (
-      <Container>
-        <div className="main-view" />
-      </Container>
-    );
+    if (!movies) {
+      return (
+        <Container className="main-view" />
+      );
+    }
 
     return (
-      <div className="main-view">
-        <Container>
-          <CardColumns>
-            {
-              selectedMovie
-                ? <MovieView movie={selectedMovie} onClick={() => this.onBackClick()} />
-                : movies.map(movie => (
-                  <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)} />
-                ))
-            }
-          </CardColumns>
+      <Router>
+        <Container className="main-view">
+          {user ?
+            <div className="top-links">
+              <Link to="/profile"><Button variant="outline-info">Profile</Button></Link>{' '}
+              <Button variant="outline-secondary" onClick={this.logout}>Log out</Button>
+            </div> : ''
+          }
+          <Route exact path="/" render={() => <MovieListView movies={movies} />} />
+          <Route path="/movies/:movieId" render={({ match }) => <MovieView movie={movies.find(m => m._id === match.params.movieId)} />} />
+          <Route path="/directors/:name" render={({ match }) => {
+            if (!movies) return <Container className="main-view" />;
+            return <DirectorView director={movies.find(m => m.Director.Name === match.params.name).Director} movies={movies.filter(m => m.Director.Name === match.params.name)} />;
+          }} />
+          <Route path="/genres/:name" render={({ match }) => {
+            if (!movies) return <Container className="main-view" />;
+            return <GenreView genre={movies.find(m => m.Genre.Name === match.params.name).Genre} movies={movies.filter(m => m.Genre.Name === match.params.name)} />;
+          }} />
+          <Route path="/profile"
+            render={() => <ProfileView
+              user={this.state.user}
+              onUpdateUser={userData => this.onUpdateUser(userData)}
+              onDeleteAccount={() => this.logout()}
+              favorites={movies.filter(m => this.state.user.favorites.indexOf(m._id) >= 0)}
+            />} />
         </Container>
-      </div>
+      </Router>
     );
   }
 }

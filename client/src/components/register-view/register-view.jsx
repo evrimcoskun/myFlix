@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
@@ -12,10 +13,28 @@ export function RegisterView(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(username, password);
-    /* Send a request to the server for authentication */
-    props.onRegister(username)
-  }
+    console.log({
+      Username: username,
+      Password: password,
+      Email: email,
+      Birthday: birthday,
+    });
+    if (password === '' || username === '') {
+      console.error('Username or password cannot be empty');
+    } else {
+      axios.post('https://ec-myflix-api.herokuapp.com/users', {
+        Username: username,
+        Password: password,
+        Email: email,
+        Birthday: birthday,
+      }).then(response => {
+        const data = response.data;
+        props.onRegister(data);
+      }).catch(error => {
+        console.error(error);
+      });
+    }
+  };
 
   return (
     <div className="register-view">
@@ -40,5 +59,5 @@ export function RegisterView(props) {
         <Button variant="primary" type="Submit" onClick={handleSubmit}>Submit</Button>{' '}
       </Form>
     </div>
-  )
+  );
 }

@@ -6,8 +6,22 @@
   max-width: 500px;
   margin: 50px auto;
 }
+.genre-info {
+  margin-bottom: 40px;
+}
+.director-info {
+  margin-bottom: 40px;
+}
+.profile-form {
+  margin-bottom: 40px;
+}
 .main-view {
   margin: 50px auto;
+}
+
+.top-links {
+  text-align: right;
+  margin-bottom: 40px;
 }
 .my-flix {
   color: steelblue;

@@ -4,6 +4,8 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
 
+import { Link } from 'react-router-dom';
+
 export class MovieView extends React.Component {
   constructor() {
     super();
@@ -12,7 +14,7 @@ export class MovieView extends React.Component {
   }
 
   render() {
-    const { movie, onClick } = this.props;
+    const { movie } = this.props;
 
     if (!movie) return null;
 
@@ -26,11 +28,13 @@ export class MovieView extends React.Component {
           </Card.Text>
         </Card.Body>
         <ListGroup className="list-group-flush">
-          <ListGroupItem><b>Genre:</b> {movie.Genre.Name}</ListGroupItem>
-          <ListGroupItem><b>Director:</b> {movie.Director.Name}</ListGroupItem>
+          <ListGroupItem><b>Genre:</b> <Link to={`/genres/${movie.Genre.Name}`}>{movie.Genre.Name}</Link></ListGroupItem>
+          <ListGroupItem><b>Director:</b> <Link to={`/directors/${movie.Director.Name}`}>{movie.Director.Name}</Link></ListGroupItem>
         </ListGroup>
         <Card.Body>
-          <Button variant="outline-primary" onClick={onClick}>Back</Button>
+          <Link to={'/'}>
+            <Button variant="outline-primary">Back</Button>
+          </Link>
         </Card.Body>
       </Card>
     );

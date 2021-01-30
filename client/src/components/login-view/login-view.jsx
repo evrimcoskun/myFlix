@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 import './login-view.scss';
 
@@ -24,11 +25,6 @@ export function LoginView(props) {
     });
   };
 
-  const OpenRegisterView = (e) => {
-    e.preventDefault();
-    props.onRegisterView();
-  };
-
   return (
     <div className="login-view">
       <h1>Welcome to myFlix</h1>
@@ -43,7 +39,9 @@ export function LoginView(props) {
           <Form.Control type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
         </Form.Group>
         <Button variant="primary" type="Submit" onClick={handleSubmit}>Submit</Button>{' '}
-        <Button variant="secondary" onClick={OpenRegisterView}>Register</Button>
+        <Link to={'/register'}>
+          <Button variant="secondary">Register</Button>
+        </Link>
       </Form>
     </div>
 
