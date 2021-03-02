@@ -1,5 +1,5 @@
 import React from 'react';
-import { MovieListView } from '../movie-list-view/movie-list-view';
+import MoviesList from '../movies-list/movies-list';
 
 import './genre-view.scss';
 
@@ -19,7 +19,7 @@ export class GenreView extends React.Component {
           <p>{genre.Description}</p>
         </div>
         <h3>Movies in this genre</h3>
-        <MovieListView movies={movies} />
+        <MoviesList movies={movies} />
       </React.Fragment>
     );
   }

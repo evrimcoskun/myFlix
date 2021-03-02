@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require("path");
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const uuid = require('uuid');
@@ -30,11 +31,16 @@ mongoose
 app.use(bodyParser.json());
 app.use(morgan('common'));
 app.use(express.static('public'));
+app.use("/client", express.static(path.join(__dirname, "client", "dist")));
 app.use(cors({
   origin: '*'
 }));
 
 let auth = require('./auth')(app);
+
+app.get("/client/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 // GET requests
 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {

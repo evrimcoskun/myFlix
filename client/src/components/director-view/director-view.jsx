@@ -1,5 +1,5 @@
 import React from 'react';
-import { MovieListView } from '../movie-list-view/movie-list-view';
+import MoviesList from '../movies-list/movies-list';
 
 import './director-view.scss';
 
@@ -24,7 +24,7 @@ export class DirectorView extends React.Component {
           }
         </div>
         <h3>Movies by the director</h3>
-        <MovieListView movies={movies} />
+        <MoviesList movies={movies} />
       </React.Fragment>
     );
   }

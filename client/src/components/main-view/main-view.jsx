@@ -12,7 +12,6 @@ import MoviesList from '../movies-list/movies-list';
 import { LoginView } from '../login-view/login-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
-import { MovieListView } from '../movie-list-view/movie-list-view';
 import { RegisterView } from '../register-view/register-view';
 import { GenreView } from '../genre-view/genre-view';
 import { DirectorView } from '../director-view/director-view';
@@ -67,7 +66,7 @@ class MainView extends React.Component {
   onRegister(userData) {
     console.log('registered');
     console.log(userData);
-    window.location = '/';
+    window.open('/client', '_self')
   }
 
   onUpdateUser(userData) {
@@ -113,7 +112,7 @@ class MainView extends React.Component {
 
     if (!user) {
       return (
-        <Router>
+        <Router basename="/client">
           <Container className="main-view">
             <Route exact path="/" render={() => <LoginView onLoggedIn={user => this.onLoggedIn(user)} />} />
             <Route path="/register" render={() => <RegisterView onRegister={user => this.onRegister(user)} />} />
@@ -128,7 +127,7 @@ class MainView extends React.Component {
     }
 
     return (
-      <Router>
+      <Router basename="/client">
         <Container className="main-view">
           {user ?
             <div className="top-links">

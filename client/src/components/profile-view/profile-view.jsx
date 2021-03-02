@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 
-import { MovieListView } from '../movie-list-view/movie-list-view';
+import MoviesList from '../movies-list/movies-list';
 
 import './profile-view.scss';
 
@@ -85,7 +85,7 @@ export function ProfileView(props) {
       </Form>
       <h2>Favorites</h2>
       {favorites.length > 0 ?
-        <MovieListView movies={favorites} isProfile={true} removeFavorite={(id) => removeFavorite(id)} />
+        <MoviesList movies={favorites} isProfile={true} removeFavorite={(id) => removeFavorite(id)} />
         : 'No favorites!'
       }
 
