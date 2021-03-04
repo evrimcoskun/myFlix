@@ -130,7 +130,7 @@ class MainView extends React.Component {
                 <Button variant="outline-secondary" onClick={this.logout}>Log out</Button>
               </div>
             ) : ''}
-          <Route exact path="/" render={() => <MoviesList movies={movies} />} />
+          <Route exact path="/" render={() => <MoviesList user={user} movies={movies} />} />
           <Route path="/movies/:movieId" render={({ match }) => <MovieView movie={movies.find((m) => m._id === match.params.movieId)} />} />
           <Route
             path="/directors/:name"

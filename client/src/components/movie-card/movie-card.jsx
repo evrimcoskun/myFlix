@@ -19,7 +19,7 @@ export class MovieCard extends React.Component {
           <Link to={`/movies/${movie._id}`}>
             <Button variant="outline-primary">Open</Button>
           </Link>{' '}
-          {isProfile ? <Button variant="outline-danger" onClick={() => this.props.removeFavorite(movie._id)}>Remove</Button> : ''}
+          {isProfile ? <Button variant="outline-danger" onClick={() => this.props.removeFavorite(movie._id)}>Remove</Button> : <Button variant="outline-secondary" onClick={() => this.props.addFavorite(movie._id)}>Add to Favorites</Button>}
         </Card.Body>
       </Card>
     );

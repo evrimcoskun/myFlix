@@ -39883,7 +39883,12 @@ var MovieCard = /*#__PURE__*/function (_React$Component) {
         onClick: function onClick() {
           return _this.props.removeFavorite(movie._id);
         }
-      }, "Remove") : ''));
+      }, "Remove") : _react.default.createElement(_Button.default, {
+        variant: "outline-secondary",
+        onClick: function onClick() {
+          return _this.props.addFavorite(movie._id);
+        }
+      }, "Add to Favorites")));
     }
   }]);
 
@@ -39984,6 +39989,8 @@ var _reactRedux = require("react-redux");
 
 var _CardColumns = _interopRequireDefault(require("react-bootstrap/CardColumns"));
 
+var _axios = _interopRequireDefault(require("axios"));
+
 var _visibilityFilterInput = _interopRequireDefault(require("../visibility-filter-input/visibility-filter-input"));
 
 var _movieCard = require("../movie-card/movie-card");
@@ -39991,6 +39998,8 @@ var _movieCard = require("../movie-card/movie-card");
 require("./movies-list.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var token = localStorage.getItem('token');
 
 var mapStateToProps = function mapStateToProps(state) {
   var visibilityFilter = state.visibilityFilter;
@@ -40002,8 +40011,21 @@ var mapStateToProps = function mapStateToProps(state) {
 function MoviesList(props) {
   var movies = props.movies,
       visibilityFilter = props.visibilityFilter,
-      isProfile = props.isProfile;
+      isProfile = props.isProfile,
+      user = props.user;
   var filteredMovies = movies;
+
+  function _addFavorite(id) {
+    console.log(id);
+
+    _axios.default.put("https://ec-myflix-api.herokuapp.com/users/".concat(user.username, "/favorites/").concat(id), {
+      headers: {
+        Authorization: "Bearer ".concat(token)
+      }
+    }).then(function (response) {
+      console.log(response.data); // Couldn't find a way to remove from the view
+    });
+  }
 
   if (visibilityFilter !== '') {
     filteredMovies = movies.filter(function (m) {
@@ -40022,6 +40044,9 @@ function MoviesList(props) {
   }), _react.default.createElement(_CardColumns.default, null, filteredMovies.map(function (m) {
     return _react.default.createElement(_movieCard.MovieCard, {
       isProfile: isProfile,
+      addFavorite: function addFavorite(id) {
+        return _addFavorite(id);
+      },
       removeFavorite: function removeFavorite(id) {
         return props.removeFavorite(id);
       },
@@ -40034,7 +40059,7 @@ function MoviesList(props) {
 var _default = (0, _reactRedux.connect)(mapStateToProps)(MoviesList);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-bootstrap/CardColumns":"../node_modules/react-bootstrap/esm/CardColumns.js","../visibility-filter-input/visibility-filter-input":"components/visibility-filter-input/visibility-filter-input.jsx","../movie-card/movie-card":"components/movie-card/movie-card.jsx","./movies-list.scss":"components/movies-list/movies-list.scss"}],"components/login-view/login-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-bootstrap/CardColumns":"../node_modules/react-bootstrap/esm/CardColumns.js","axios":"../node_modules/axios/index.js","../visibility-filter-input/visibility-filter-input":"components/visibility-filter-input/visibility-filter-input.jsx","../movie-card/movie-card":"components/movie-card/movie-card.jsx","./movies-list.scss":"components/movies-list/movies-list.scss"}],"components/login-view/login-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -42012,6 +42037,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
         path: "/",
         render: function render() {
           return _react.default.createElement(_moviesList.default, {
+            user: user,
             movies: movies
           });
         }
@@ -42253,7 +42279,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54427" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58098" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
